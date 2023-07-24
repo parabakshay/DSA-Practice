@@ -3,6 +3,7 @@ const Node = require('./Node');
 class LinkedList {
     constructor() {
         this.head = null;
+        this.tail = null;
     }
 
     isEmpty() {
@@ -13,20 +14,34 @@ class LinkedList {
         return this.head;
     }
 
+    getTail() {
+        return this.tail;
+    }
+
     insertAtHead(data) {
         const newNode = new Node(data);
-        newNode.next = this.head;
-        this.head = newNode;
+        if (this.isEmpty()) {
+            this.head = newNode;
+            this.tail = newNode;
+        } else {
+            newNode.next = this.head;
+            this.head.prev = newNode;
+            this.head = newNode;
+        }
         return this;
     }
 
     insertAtTail(data) {
         const newNode = new Node(data);
-        if (this.isEmpty()) this.head = newNode;
-        else {
-            let currentNode = this.head;
-            while (currentNode.next != null) currentNode = currentNode.next;
-            currentNode.next = newNode;
+        if (this.isEmpty()) {
+            newNode.prev = null;
+            newNode.next = null;
+            this.head = newNode;
+            this.tail = newNode;
+        } else {
+            this.tail.next = newNode;
+            newNode.prev = this.tail;
+            this.tail = newNode;
         }
         return this;
     }
@@ -42,41 +57,53 @@ class LinkedList {
 
     deleteHead() {
         if (this.isEmpty()) return this;
-        this.head = this.head.next;
+        if (this.head === this.tail) {
+            this.head = null;
+            this.tail = null;
+        } else {
+            this.head = this.head.next;
+            this.head.prev = null;
+        }
         return this;
     }
 
     deleteTail() {
         if (this.isEmpty()) return this;
-        if (this.head.next == null) {
+        if (this.head === this.tail) {
             this.head = null;
-            return this;
+            this.tail = null;
+        } else {
+            this.tail = this.tail.prev;
+            this.tail.next = null;
         }
-        let currentNode = this.head.next;
-        let prevNode = this.head;;
-        while (currentNode.next != null) {
-            prevNode = currentNode;
-            currentNode = currentNode.next;
-        }
-        prevNode.next = null;
         return this;
     }
 
     deleteValue(data) {
         if (this.isEmpty()) return false;
         if (this.head.data == data) {
-            this.deleteHead();
-            return true;
-        }
-        let currentNode = this.head;
-        while (currentNode != null) {
-            if ((currentNode.next != null) && (currentNode.next.data == data)) {
-                currentNode.next = currentNode.next.next;
-                return true
+            if (this.head.next == null) {
+                this.head = null;
+                this.tail = null;
+                
+            } else {
+                this.head = this.head.next;
+                this.head.prev = null;
             }
-            currentNode = currentNode.next
+            return true
+        } else {
+            let currentNode = this.head;
+            while(currentNode != null) {
+                if ((currentNode.next != null) && (currentNode.next.data == data)) {
+                    currentNode.next.prev = null;
+                    if (currentNode.next.next != null) currentNode.next.next.prev = currentNode;
+                    currentNode.next = currentNode.next.next;
+                    return true
+                }
+                currentNode = currentNode.next
+            }
+            return false;
         }
-        return false;
     }
 
     printList() {
@@ -94,18 +121,17 @@ class LinkedList {
             return true;
         }
     }
-
 }
 
 const main = function () {
     //TestCase 1: Insert at head when list is empty
-    const list = new LinkedList();
-    list.insertAtHead(1);
-    list.printList();
+    const list1 = new LinkedList();
+    list1.insertAtHead(1);
+    list1.printList();
 
     //TestCase 2: Insert at head when list is not empty
-    list.insertAtHead(2);
-    list.printList();
+    list1.insertAtHead(2);
+    list1.printList();
 
     //TestCase 3: Insert at tail when list is empty
     const list2 = new LinkedList();
@@ -134,7 +160,11 @@ const main = function () {
     list2.printList();
 
     //TestCase 9: Delete by value
+    list2.deleteValue(88);
+    list2.printList();
     list2.deleteValue(77);
+    list2.printList();
+    list2.deleteValue(66);
     list2.printList();
 }
 

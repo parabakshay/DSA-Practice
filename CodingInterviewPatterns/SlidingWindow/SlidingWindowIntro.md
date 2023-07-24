@@ -11,11 +11,10 @@ Instead, what if we focused on the element entering the window and the one leavi
 
 ## Does my problem match this pattern?
 * Yes, if both these conditions are fulfilled:
-1. The problem requires repeated computations on a contiguous set of data elements (a subarray or a substring), such that the window moves across the input array from one end to the other. The size of the window may be fixed or variable, depending on the requirements of the problem. The repeated computations may be a direct part of the final solution, or they may be intermediate steps building up towards the final solution.
-
-2. The computations performed every time the window moves take O(1) time or are a slow-growing function, such as 
+  1. The problem requires repeated computations on a contiguous set of data elements (a subarray or a substring), such that the window moves across the input array from one end to the other. The size of the window may be fixed or variable, depending on the requirements of the problem. The repeated computations may be a direct part of the final solution, or they may be intermediate steps building up towards the final solution.
+  2. The computations performed every time the window moves take O(1) time or are a slow-growing function, such as 
 log, of a small variable, say k, where k≪n.
 
 * No, if either of these conditions are fulfilled:
-1. The input data structure does not support random access.
-2. You have to process the entire data without segmentation.
+  1. The input data structure does not support random access.
+  2. You have to process the entire data without segmentation.
