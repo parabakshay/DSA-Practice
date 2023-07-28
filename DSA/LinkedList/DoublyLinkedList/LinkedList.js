@@ -1,9 +1,10 @@
 const Node = require('./Node');
 
-class LinkedList {
+module.exports = class LinkedList {
     constructor() {
         this.head = null;
         this.tail = null;
+        this.length = 0;
     }
 
     isEmpty() {
@@ -18,6 +19,14 @@ class LinkedList {
         return this.tail;
     }
 
+    incrementLength() {
+        return this.length += 1;
+    }
+
+    decrementLength() {
+        return this.length -= 1;
+    }
+
     insertAtHead(data) {
         const newNode = new Node(data);
         if (this.isEmpty()) {
@@ -28,6 +37,7 @@ class LinkedList {
             this.head.prev = newNode;
             this.head = newNode;
         }
+        this.incrementLength();
         return this;
     }
 
@@ -43,6 +53,7 @@ class LinkedList {
             newNode.prev = this.tail;
             this.tail = newNode;
         }
+        this.incrementLength();
         return this;
     }
 
@@ -56,7 +67,8 @@ class LinkedList {
     }
 
     deleteHead() {
-        if (this.isEmpty()) return this;
+        if (this.isEmpty()) return null;
+        const headElement = this.head.data;
         if (this.head === this.tail) {
             this.head = null;
             this.tail = null;
@@ -64,11 +76,13 @@ class LinkedList {
             this.head = this.head.next;
             this.head.prev = null;
         }
-        return this;
+        this.decrementLength();
+        return headElement;
     }
 
     deleteTail() {
-        if (this.isEmpty()) return this;
+        if (this.isEmpty()) return null;
+        const tailElement = this.tail.data;
         if (this.head === this.tail) {
             this.head = null;
             this.tail = null;
@@ -76,7 +90,8 @@ class LinkedList {
             this.tail = this.tail.prev;
             this.tail.next = null;
         }
-        return this;
+        this.decrementLength();
+        return tailElement;
     }
 
     deleteValue(data) {
@@ -90,6 +105,7 @@ class LinkedList {
                 this.head = this.head.next;
                 this.head.prev = null;
             }
+            this.decrementLength();
             return true
         } else {
             let currentNode = this.head;
@@ -98,6 +114,7 @@ class LinkedList {
                     currentNode.next.prev = null;
                     if (currentNode.next.next != null) currentNode.next.next.prev = currentNode;
                     currentNode.next = currentNode.next.next;
+                    this.decrementLength();
                     return true
                 }
                 currentNode = currentNode.next
@@ -122,50 +139,3 @@ class LinkedList {
         }
     }
 }
-
-const main = function () {
-    //TestCase 1: Insert at head when list is empty
-    const list1 = new LinkedList();
-    list1.insertAtHead(1);
-    list1.printList();
-
-    //TestCase 2: Insert at head when list is not empty
-    list1.insertAtHead(2);
-    list1.printList();
-
-    //TestCase 3: Insert at tail when list is empty
-    const list2 = new LinkedList();
-    list2.insertAtTail(99);
-    list2.printList();
-
-    //TestCase 4: Insert at tail when list is not empty
-    list2.insertAtTail(88);
-    list2.printList();
-
-    //TestCase 5: Search for value which does not exist
-    list2.insertAtTail(77);
-    list2.insertAtTail(66);
-    list2.insertAtTail(55);
-    console.log(list2.search(44));
-
-    //TestCase 6: Search for value which does exist
-    console.log(list2.search(66));
-
-    //TestCase 7: Delete at head
-    list2.deleteHead();
-    list2.printList();
-
-    //TestCase 8: Delete at tail
-    list2.deleteTail();
-    list2.printList();
-
-    //TestCase 9: Delete by value
-    list2.deleteValue(88);
-    list2.printList();
-    list2.deleteValue(77);
-    list2.printList();
-    list2.deleteValue(66);
-    list2.printList();
-}
-
-main();
