@@ -4,15 +4,26 @@ const DirectedBFS = require('./DirectedBreadthFirstSearch');
 const Reachability = require('./Reachability');
 const DirectedDepthFirstPath = require('./DirectedDepthFirstPath');
 const DirectedBreadthFirstPath = require('./DirectedBreadthFirstPath');
+const DirectedCycle = require('./DirectedCycle');
+const Topological = require('./Topological');
 
 const main = function () {
-    const g = new DiGraph(5);
-    g.addEdge(0, 1);
-    g.addEdge(0, 2);
-    g.addEdge(1, 3);
+    const g = new DiGraph(13);
     g.addEdge(2, 3);
-    g.addEdge(3, 2);
-    g.addEdge(2, 4);
+    g.addEdge(0, 6);
+    g.addEdge(0, 1);
+    g.addEdge(2, 0);
+    g.addEdge(11, 12);
+    g.addEdge(9, 12);
+    g.addEdge(9, 10);
+    g.addEdge(9, 11);
+    g.addEdge(3, 5);
+    g.addEdge(8, 7);
+    g.addEdge(5, 4);
+    g.addEdge(0, 5);
+    g.addEdge(6, 4);
+    g.addEdge(6, 9);
+    g.addEdge(7, 6);
     g.printGraph();
     console.log();
     console.log(">>Directed DFS<<");
@@ -39,6 +50,21 @@ const main = function () {
     const bfsPath = new DirectedBreadthFirstPath(g, source);
     let path2 = bfsPath.pathTo(4);
     while(!path2.isEmpty()) console.log(path2.pop());
+
+    console.log();
+    console.log(">>Directed Cycle<<");
+    const g2 = new DiGraph(4);
+    g2.addEdge(0, 2);
+    g2.addEdge(0, 1);
+    g2.addEdge(2, 0);
+    g2.addEdge(1, 2);
+    g2.addEdge(2, 3);
+    const finder = new DirectedCycle(g2);
+    while(!finder.cycle.isEmpty()) console.log(finder.cycle.pop());
+
+    console.log();
+    console.log(">>Topological Order<<");
+    new Topological(g);
 }
 
 main();
