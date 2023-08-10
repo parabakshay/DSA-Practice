@@ -6,6 +6,8 @@ const DirectedDepthFirstPath = require('./DirectedDepthFirstPath');
 const DirectedBreadthFirstPath = require('./DirectedBreadthFirstPath');
 const DirectedCycle = require('./DirectedCycle');
 const Topological = require('./Topological');
+const StrongConnectivity = require('./StrongConnectivity');
+const TransitiveClosure = require('./TransitiveClosure');
 
 const main = function () {
     const g = new DiGraph(13);
@@ -28,6 +30,11 @@ const main = function () {
     console.log();
     console.log(">>Directed DFS<<");
     new DirectedDFS(g);
+
+    console.log();
+    console.log(">>Reverse Directed Graph<<");
+    const reverseDirectedGraph = g.reverse();
+    reverseDirectedGraph.printGraph();
 
     console.log();
     console.log(">>Directed BFS<<");
@@ -64,7 +71,45 @@ const main = function () {
 
     console.log();
     console.log(">>Topological Order<<");
-    new Topological(g);
+    let order = new Topological(g);
+    for(let v = 0; v < g.numOfVertices(); v++) console.log(order.copyStack.pop());
+
+    console.log();
+    console.log(">>Strong Connectivity<<");
+    const g3 = new DiGraph(13);
+    g3.addEdge(4, 2);
+    g3.addEdge(2, 3);
+    g3.addEdge(3, 2);
+    g3.addEdge(6, 0);
+    g3.addEdge(0, 1);
+    g3.addEdge(2, 0);
+    g3.addEdge(11, 12);
+    g3.addEdge(12, 9);
+    g3.addEdge(9, 10);
+    g3.addEdge(9, 11);
+    g3.addEdge(8, 9);
+    g3.addEdge(10, 12);
+    g3.addEdge(11, 4);
+    g3.addEdge(4, 3);
+    g3.addEdge(3, 5);
+    g3.addEdge(7, 8);
+    g3.addEdge(8, 7);
+    g3.addEdge(5, 4);
+    g3.addEdge(0, 5);
+    g3.addEdge(6, 4);
+    g3.addEdge(6, 9);
+    g3.addEdge(7, 6);
+    let strongConnectivity = new StrongConnectivity(g3);
+    g3.printGraph();
+    console.log("Is 0 and 1 strongly connected? Ans: ", strongConnectivity.isStronglyConnected(0, 1));
+    console.log("Number of Components: " ,strongConnectivity.numOfComponent());
+
+    console.log();
+    console.log(">>Transitive Closure<<");
+    let transitiveClosure = new TransitiveClosure(g);
+    console.log("Is 1 reachable from 0: ", transitiveClosure.reachable(0, 1));
+    console.log("Is 1 reachable from 7: ", transitiveClosure.reachable(7, 1));
+
 }
 
 main();

@@ -29,6 +29,18 @@ module.exports = class Graph {
         }
     }
 
+    reverse() {
+        let revDiGraph = new Graph(this.vertices);
+        for(let v = 0; v < this.vertices; v++) {
+            let currentVertex = this.list[v].head;
+            while(currentVertex != null) {
+                revDiGraph.addEdge(currentVertex.data, v);
+                currentVertex = currentVertex.next;
+            }
+        }
+        return revDiGraph;
+    }
+
     printGraph() {
         console.log(">>Adjacency List of Directed Graph<<");
         var i;
